@@ -7,8 +7,6 @@ from atlassian.bitbucket import Cloud
 from starlette_context import context
 
 from pr_agent.algo.types import FilePatchInfo, EDIT_TYPE
-from ..algo.file_filter import filter_ignored
-from ..algo.language_handler import is_valid_file
 from ..algo.utils import find_line_number_of_relevant_line_in_file
 from ..config_loader import get_settings
 from ..log import get_logger
@@ -124,30 +122,13 @@ class BitbucketProvider(GitProvider):
         if self.diff_files:
             return self.diff_files
 
-        diffs_original = list(self.pr.diffstat())
-        diffs = filter_ignored(diffs_original, 'bitbucket')
-        if diffs != diffs_original:
-            try:
-                names_original = [d.new.path for d in diffs_original]
-                names_filtered = [d.new.path for d in diffs]
-                get_logger().info(f"Filtered out [ignore] files for PR", extra={
-                    'original_files': names_original,
-                    'filtered_files': names_filtered
-                })
-            except Exception as e:
-                pass
-
+        diffs = self.pr.diffstat()
         diff_split = [
             "diff --git%s" % x for x in self.pr.diff().split("diff --git") if x.strip()
         ]
 
-        invalid_files_names = []
         diff_files = []
         for index, diff in enumerate(diffs):
-            if not is_valid_file(diff.new.path):
-                invalid_files_names.append(diff.new.path)
-                continue
-
             original_file_content_str = self._get_pr_file_content(
                 diff.old.get_data("links")
             )
@@ -168,9 +149,6 @@ class BitbucketProvider(GitProvider):
             elif diff.data['status'] == 'renamed':
                 file_patch_canonic_structure.edit_type = EDIT_TYPE.RENAMED
             diff_files.append(file_patch_canonic_structure)
-
-        if invalid_files_names:
-            get_logger().info(f"Invalid file names: {invalid_files_names}")
 
 
         self.diff_files = diff_files
@@ -194,7 +172,7 @@ class BitbucketProvider(GitProvider):
                     latest_commit_url = self.get_latest_commit_url()
                     comment_url = self.get_comment_url(comment)
                     if update_header:
-                        updated_header = f"{initial_header}\n\n#### ({name.capitalize()} updated until commit {latest_commit_url})\n"
+                        updated_header = f"{initial_header}\n\n### ({name.capitalize()} updated until commit {latest_commit_url})\n"
                         pr_comment_updated = pr_comment.replace(initial_header, updated_header)
                     else:
                         pr_comment_updated = pr_comment
@@ -235,7 +213,7 @@ class BitbucketProvider(GitProvider):
         except Exception as e:
             get_logger().exception(f"Failed to remove comment, error: {e}")
 
-    # function to create_inline_comment
+    # funtion to create_inline_comment
     def create_inline_comment(self, body: str, relevant_file: str, relevant_line_in_file: str, absolute_position: int = None):
         position, absolute_position = find_line_number_of_relevant_line_in_file(self.get_diff_files(),
                                                                             relevant_file.strip('`'),
@@ -404,7 +382,7 @@ class BitbucketProvider(GitProvider):
 
     def get_commit_messages(self):
         return ""  # not implemented yet
-
+    
     # bitbucket does not support labels
     def publish_description(self, pr_title: str, description: str):
         payload = json.dumps({
@@ -424,7 +402,7 @@ class BitbucketProvider(GitProvider):
     # bitbucket does not support labels
     def publish_labels(self, pr_types: list):
         pass
-
+    
     # bitbucket does not support labels
     def get_pr_labels(self, update=False):
         pass

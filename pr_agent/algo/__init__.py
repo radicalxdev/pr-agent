@@ -9,7 +9,7 @@ MAX_TOKENS = {
     'gpt-4': 8000,
     'gpt-4-0613': 8000,
     'gpt-4-32k': 32000,
-    'gpt-4-1106-preview': 128000,  # 128K, but may be limited by config.max_model_tokens
+    'gpt-4-1106-preview': 128000, # 128K, but may be limited by config.max_model_tokens
     'gpt-4-0125-preview': 128000,  # 128K, but may be limited by config.max_model_tokens
     'gpt-4o': 128000,  # 128K, but may be limited by config.max_model_tokens
     'gpt-4o-2024-05-13': 128000,  # 128K, but may be limited by config.max_model_tokens
@@ -23,27 +23,17 @@ MAX_TOKENS = {
     'meta-llama/Llama-2-7b-chat-hf': 4096,
     'vertex_ai/codechat-bison': 6144,
     'vertex_ai/codechat-bison-32k': 32000,
-    'vertex_ai/claude-3-haiku@20240307': 100000,
-    'vertex_ai/claude-3-sonnet@20240229': 100000,
-    'vertex_ai/claude-3-opus@20240229': 100000,
-    'vertex_ai/claude-3-5-sonnet@20240620': 100000,
-    'vertex_ai/gemini-1.5-pro': 1048576,
-    'vertex_ai/gemini-1.5-flash': 1048576,
-    'vertex_ai/gemma2': 8200,
     'codechat-bison': 6144,
     'codechat-bison-32k': 32000,
     'anthropic.claude-instant-v1': 100000,
     'anthropic.claude-v1': 100000,
     'anthropic.claude-v2': 100000,
     'anthropic/claude-3-opus-20240229': 100000,
-    'anthropic/claude-3-5-sonnet-20240620': 100000,
     'bedrock/anthropic.claude-instant-v1': 100000,
     'bedrock/anthropic.claude-v2': 100000,
     'bedrock/anthropic.claude-v2:1': 100000,
     'bedrock/anthropic.claude-3-sonnet-20240229-v1:0': 100000,
     'bedrock/anthropic.claude-3-haiku-20240307-v1:0': 100000,
-    'bedrock/anthropic.claude-3-5-sonnet-20240620-v1:0': 100000,
     'groq/llama3-8b-8192': 8192,
     'groq/llama3-70b-8192': 8192,
-    'ollama/llama3': 4096,
 }

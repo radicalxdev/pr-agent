@@ -46,16 +46,16 @@ command2class = {
 
 commands = list(command2class.keys())
 
-
 class PRAgent:
     def __init__(self, ai_handler: partial[BaseAiHandler,] = LiteLLMAIHandler):
-        self.ai_handler = ai_handler  # will be initialized in run_action
+        self.ai_handler = ai_handler # will be initialized in run_action
         self.forbidden_cli_args = ['enable_auto_approval']
 
     async def handle_request(self, pr_url, request, notify=None) -> bool:
+            
         # First, apply repo specific settings if exists
         apply_repo_settings(pr_url)
-
+        res = None
         # Then, apply user specific settings if exists
         if isinstance(request, str):
             request = request.replace("'", "\\'")
@@ -65,13 +65,13 @@ class PRAgent:
         else:
             action, *args = request
 
+
         if args:
             for forbidden_arg in self.forbidden_cli_args:
                 for arg in args:
                     if forbidden_arg in arg:
-                        get_logger().error(
-                            f"CLI argument for param '{forbidden_arg}' is forbidden. Use instead a configuration file."
-                        )
+                        print("Forbidden")
+                        get_logger().error(f"CLI argument for param '{forbidden_arg}' is forbidden. Use instead a configuration file.")
                         return False
         args = update_settings_from_args(args)
 
@@ -86,14 +86,15 @@ class PRAgent:
             if action == "answer":
                 if notify:
                     notify()
-                await PRReviewer(pr_url, is_answer=True, args=args, ai_handler=self.ai_handler).run()
+                res = await PRReviewer(pr_url, is_answer=True, args=args, ai_handler=self.ai_handler).run()
             elif action == "auto_review":
-                await PRReviewer(pr_url, is_auto=True, args=args, ai_handler=self.ai_handler).run()
+
+                res = await PRReviewer(pr_url, is_auto=True, args=args, ai_handler=self.ai_handler).run()
             elif action in command2class:
                 if notify:
                     notify()
-
-                await command2class[action](pr_url, ai_handler=self.ai_handler, args=args).run()
+                return await command2class[action](pr_url, ai_handler=self.ai_handler, args=args).run()
             else:
-                return False
-            return True
+                return ("Failed")
+            return res 
+

@@ -56,29 +56,18 @@ class PRQuestions:
                             'config': dict(get_settings().config)}
         get_logger().debug("Relevant configs", artifacts=relevant_configs)
         if get_settings().config.publish_output:
-            self.git_provider.publish_comment("Preparing answer...", is_temporary=True)
+            pass
 
-        # identify image
-        img_path = self.identify_image_in_comment()
+        img_path = self.idenfity_image_in_comment()
         if img_path:
             get_logger().debug(f"Image path identified", artifact=img_path)
 
         await retry_with_fallback_models(self._prepare_prediction, model_type=ModelType.TURBO)
+        res =self._prepare_pr_answer()
+        get_logger().info(f"PR", res)
+        return res
 
-        pr_comment = self._prepare_pr_answer()
-        get_logger().debug(f"PR output", artifact=pr_comment)
-
-        if self.git_provider.is_supported("gfm_markdown") and get_settings().pr_questions.enable_help_text:
-            pr_comment += "<hr>\n\n<details> <summary><strong>💡 Tool usage guide:</strong></summary><hr> \n\n"
-            pr_comment += HelpMessage.get_ask_usage_guide()
-            pr_comment += "\n</details>\n"
-
-        if get_settings().config.publish_output:
-            self.git_provider.publish_comment(pr_comment)
-            self.git_provider.remove_initial_comment()
-        return ""
-
-    def identify_image_in_comment(self):
+    def idenfity_image_in_comment(self):
         img_path = ''
         if '![image]' in self.question_str:
             # assuming structure:

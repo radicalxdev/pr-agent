@@ -34,15 +34,6 @@ global_settings = Dynaconf(
 
 
 def get_settings():
-    """
-    Retrieves the current settings.
-
-    This function attempts to fetch the settings from the starlette_context's context object. If it fails,
-    it defaults to the global settings defined outside of this function.
-
-    Returns:
-        Dynaconf: The current settings object, either from the context or the global default.
-    """
     try:
         return context["settings"]
     except Exception:
@@ -50,7 +41,7 @@ def get_settings():
 
 
 # Add local configuration from pyproject.toml of the project being reviewed
-def _find_repository_root() -> Optional[Path]:
+def _find_repository_root() -> Path:
     """
     Identify project root directory by recursively searching for the .git directory in the parent directories.
     """
@@ -70,7 +61,7 @@ def _find_pyproject() -> Optional[Path]:
     """
     repo_root = _find_repository_root()
     if repo_root:
-        pyproject = repo_root / "pyproject.toml"
+        pyproject = _find_repository_root() / "pyproject.toml"
         return pyproject if pyproject.is_file() else None
     return None
 

@@ -8,5 +8,4 @@ glob = [
 regex = [
     # Ignore files and directories matching these regex patterns.
     # See https://learnbyexample.github.io/python-regex-cheatsheet/
-    # for example: regex = ['.*\.toml$']
 ]

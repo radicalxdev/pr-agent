@@ -9,7 +9,6 @@ from pr_agent.log import setup_logger
 log_level = os.environ.get("LOG_LEVEL", "INFO")
 setup_logger(log_level)
 
-
 def set_parser():
     parser = argparse.ArgumentParser(description='AI based pull request analyzer', usage=
     """\
@@ -51,17 +50,15 @@ def set_parser():
     parser.add_argument('rest', nargs=argparse.REMAINDER, default=[])
     return parser
 
-
-def run_command(pr_url, command):
+async def async_run_command(pr_url, command):
     # Preparing the command
     run_command_str = f"--pr_url={pr_url} {command.lstrip('/')}"
     args = set_parser().parse_args(run_command_str.split())
 
     # Run the command. Feedback will appear in GitHub PR comments
-    run(args=args)
+    return await async_run(args=args)
 
-
-def run(inargs=None, args=None):
+async def async_run(inargs=None, args=None):
     parser = set_parser()
     if not args:
         args = parser.parse_args(inargs)
@@ -72,12 +69,13 @@ def run(inargs=None, args=None):
     command = args.command.lower()
     get_settings().set("CONFIG.CLI_MODE", True)
     if args.issue_url:
-        result = asyncio.run(PRAgent().handle_request(args.issue_url, [command] + args.rest))
+        result = await PRAgent().handle_request(args.issue_url, [command] + args.rest)
     else:
-        result = asyncio.run(PRAgent().handle_request(args.pr_url, [command] + args.rest))
+        result = await PRAgent().handle_request(args.pr_url, [command] + args.rest)
     if not result:
         parser.print_help()
-
+        
+    return result
 
 if __name__ == '__main__':
-    run()
+    asyncio.run(async_run())
