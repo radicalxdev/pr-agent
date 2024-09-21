@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pr-agent"
-version = "0.2.2"
+version = "0.1"
 
 authors = [{name= "CodiumAI", email = "tal.r@codium.ai"}]
 
@@ -18,7 +18,6 @@ description = "CodiumAI PR-Agent aims to help efficiently review and handle pull
 readme = "README.md"
 requires-python = ">=3.10"
 keywords = ["AI", "Agents", "Pull Request", "Automation", "Code Review"]
-license = {name = "Apache 2.0", file = "LICENSE"}
 
 classifiers = [
   "Intended Audience :: Developers",
