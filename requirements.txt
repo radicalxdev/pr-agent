@@ -42,6 +42,9 @@ google-auth-httplib2==0.2.0
 google-cloud-aiplatform==1.38.0
 google-cloud-bigquery==3.25.0
 google-cloud-core==2.4.1
+google-cloud-appengine-logging==1.4.5
+google-clloud-audit-log==0.3.0
+google-cloud-logging==3.11.2
 google-cloud-resource-manager==1.12.5
 google-cloud-storage==2.10.0
 google-crc32c==1.6.0
@@ -61,7 +64,7 @@ httpx==0.27.2
 huggingface-hub==0.25.0
 idna==3.10
 ijson==3.3.0
-importlib_metadata==8.5.0
+importlib_metadata==8.4.0
 iniconfig==2.0.0
 isodate==0.6.1
 Jinja2==3.1.2
@@ -110,6 +113,7 @@ nltk==3.9.1
 numpy==1.26.4
 oauthlib==3.2.2
 openai==1.47.0
+opentelemetry-api==1.27.0
 orjson==3.10.7
 packaging==24.1
 pandas==2.2.3
@@ -124,6 +128,7 @@ pyasn1==0.6.1
 pyasn1_modules==0.4.1
 pycparser==2.22
 pydantic==2.9.2
+pydantic_settings==2.5.2
 pydantic_core==2.23.4
 pygame==2.6.0
 PyGithub==1.59.1
@@ -139,6 +144,7 @@ python-gitlab==3.15.0
 python-multipart==0.0.10
 pytz==2024.2
 PyYAML==6.0.1
+redis==5.0.8
 regex==2024.9.11
 requests==2.32.3
 requests-oauthlib==2.0.0
